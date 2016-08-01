@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+    </default>
+    <catalog_product_view translate="label">
+        <reference name="content">
+            <reference name="product.info">
+                <action method="setTemplate"><template>groupbyproduct/product/view.phtml</template></action>
+                <block type="groupbyproduct/products" name="product.info.groupbyproduct" as="groupbyproduct" template="groupbyproduct/products.phtml" />
+            </reference>
+		</reference>
+    </catalog_product_view>
+</layout>

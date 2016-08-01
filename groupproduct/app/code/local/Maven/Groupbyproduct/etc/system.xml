@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<tabs>
+		<groupbyproduct translate="label" module="groupbyproduct">
+			<label>Group By Product</label>
+			<sort_order>200</sort_order>
+		</groupbyproduct>
+	</tabs>
+	<sections>
+		<groupbyproduct translate="label" module="groupbyproduct">
+			<label>Shop By Settings</label>
+			<tab>groupbyproduct</tab>
+			<sort_order>2000</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<general>
+					<label>General</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>10</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<main_group_attribute translate="label">
+                            <label>Group Attribute code</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>groupbyproduct/system_config_source_mainattribute</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </main_group_attribute>
+                        <main_group_color>
+                        	<label>Group Attribute For color</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>groupbyproduct/system_config_source_mainattributecolor</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </main_group_color>
+                        <main_group_size>
+                        	<label>Group Attribute For Size</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>groupbyproduct/system_config_source_mainattributesize</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </main_group_size>
+                    </fields>
+				</general>
+          	</groups>
+		</groupbyproduct>
+	</sections>
+</config>

@@ -1,0 +1,129 @@
+<?php $currentProduct = Mage::registry('current_product'); ?>
+<?php $currentProductData = $currentProduct->getData(); ?>
+<?php $mainAttribute = Mage::getStoreConfig('groupbyproduct/general/main_group_attribute',$currentProductData['store_id']);?>
+<?php $colorAttribute = Mage::getStoreConfig('groupbyproduct/general/main_group_color',$currentProductData['store_id']);?>
+<?php $sizeAttribute = Mage::getStoreConfig('groupbyproduct/general/main_group_size',$currentProductData['store_id']);?>
+<?php $productGroupData   = $currentProductData[$mainAttribute]; ?>
+<?php if(!empty($productGroupData)): ?>
+	<?php  $currentProductColor 	= $currentProductData[$colorAttribute]; ?>
+	<?php  $currentProductSize 		= $currentProductData[$sizeAttribute]; ?>
+	<?php  $currentProductId 		= $currentProductData['entity_id']; ?>
+	<?php  $colorOptionsDetails 	= Mage::getSingleton("eav/config")->getAttribute("catalog_product", $colorAttribute); ?>
+	<?php  $colorOptions 			= $colorOptionsDetails->getSource()->getAllOptions(false); ?>
+	<?php  $discardColorOptions 	= $colorOptions ?>
+	<?php  $sizeOptionsDetails 		= Mage::getSingleton("eav/config")->getAttribute("catalog_product", $sizeAttribute); ?>
+	<?php  $sizeOptions 			= $sizeOptionsDetails->getSource()->getAllOptions(false); ?>
+	<?php  $discardSizeOptions 		= $sizeOptions; ?>
+	<?php // pp($colorOptions);?>
+	<?php // p($sizeOptions);?>
+	<?php // pp($productGroupData);?>
+	<?php // p($currentProductData);?>
+	<div class="section group-products">
+	    <div class="section color">
+			<div class="color-title">
+				<?php echo $this->__("Select Color"); ?>
+			</div>
+			<div class="color-selectors-wrap">
+				<?php // Loop Products ?>
+				<?php foreach($discardColorOptions as $colorKey => $colorOpt): ?>
+					<?php // p($colorOpt);?>
+					<?php $productData = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter($mainAttribute,$productGroupData)->addFieldToFilter($colorAttribute,$colorOpt['value'])->addFieldToFilter($sizeAttribute,$currentProductSize)->getFirstItem()->getData(); ?>
+					<?php if(empty($productData)): ?>
+						<?php $productDt = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter($mainAttribute,$productGroupData)->addFieldToFilter($colorAttribute,$colorOpt['value'])->getFirstItem()->getData(); ?>
+						<?php if(!empty($productDt)): ?>
+							<?php $class=""; ?>
+							<?php if($productDt['entity_id']==$currentProductId): ?>
+								<?php $class="active"; ?>
+							<?php else : ?>
+								<?php $class=""; ?>
+							<?php endif; ?>
+							<?php $_product = Mage::getModel("catalog/product")->load($productDt['entity_id']); ?>
+								<?php $_helper = $this->helper('catalog/output'); ?>
+								<a href="<?php echo $_product->getProductUrl(); ?>" class="product-color-group <?php echo $class; ?>">
+									<div class="selector-attr-color" title="<?php echo $this->__($_product->getAttributeText($colorAttribute));?>">
+										<div class="selector-paletteImage <?php echo $class; ?>" style="background-repeat: no-repeat;background-image:url(<?php echo $_helper->productAttribute($_product, $this->helper('catalog/image')->init($_product, 'image')->resize(40), 'image'); ?>);" data-imagvalue="<?php echo $_helper->productAttribute($_product, $this->helper('catalog/image')->init($_product, 'image')->resize(265), 'image'); ?>" data-selectorvalue="<?php echo $this->__($_product->getAttributeText($colorAttribute));?>">
+											<span><?php echo $this->__($_product->getAttributeText($colorAttribute));?></span>
+										</div>
+									</div>
+								</a>
+							<?php unset($discardColorOptions[$colorKey]); ?>
+						<?php endif; ?>
+					<?php else: ?>
+						<?php $_product = Mage::getModel("catalog/product")->load($productData['entity_id']); ?>
+							<?php $class=""; ?>
+							<?php if($productData['entity_id']==$currentProductId): ?>
+								<?php $class="active"; ?>
+							<?php else : ?>
+								<?php $class=""; ?>
+							<?php endif; ?>
+							<?php $_helper = $this->helper('catalog/output'); ?>
+							<a href="<?php echo $_product->getProductUrl(); ?>" class="product-color-group <?php echo $class; ?>">
+								<div class="selector-attr-color" title="<?php echo $this->__($_product->getAttributeText($colorAttribute));?>">
+									<div class="selector-paletteImage <?php echo $class; ?>" style="background-repeat: no-repeat;background-image:url(<?php echo $_helper->productAttribute($_product, $this->helper('catalog/image')->init($_product, 'image')->resize(40), 'image'); ?>);" data-imagvalue="<?php echo $_helper->productAttribute($_product, $this->helper('catalog/image')->init($_product, 'image')->resize(265), 'image'); ?>" data-selectorvalue="<?php echo $this->__($_product->getAttributeText($colorAttribute));?>">
+										<span><?php echo $this->__($_product->getAttributeText($colorAttribute));?></span>
+									</div>
+								</div>
+							</a>
+						<?php unset($discardColorOptions[$colorKey]); ?>
+					<?php endif; ?>
+					<?php unset($_product); ?>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<div class="section size">
+			<div class="size-title">
+				<?php echo $this->__("Select Size"); ?>
+			</div>
+			<div class="size-selectors-wrap">
+				<?php foreach($discardSizeOptions as $sizeKey => $sizeOpt): ?>
+					<?php $productData = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter($mainAttribute,$productGroupData)->addFieldToFilter($sizeAttribute,$sizeOpt['value'])->addFieldToFilter($colorAttribute,$currentProductColor)->getFirstItem()->getData(); ?>
+					<?php if(empty($productData)): ?>
+						<?php $productDt = Mage::getModel('catalog/product')->getCollection()->addFieldToFilter($mainAttribute,$productGroupData)->addFieldToFilter($sizeAttribute,$sizeOpt['value'])->getFirstItem()->getData(); ?>
+						<?php if(!empty($productDt)): ?>
+							<?php if($productDt['entity_id']==$currentProductId): ?>
+								<?php $class="active"; ?>
+							<?php else : ?>
+								<?php $class=""; ?>
+							<?php endif; ?>
+							<?php $_product = Mage::getModel("catalog/product")->load($productDt['entity_id']); ?>
+							<?php $_helper = $this->helper('catalog/output'); ?>
+								<a href="<?php echo $_product->getProductUrl(); ?>" class="product-size-group <?php echo $class; ?>">
+									<div class="selector-attr-size" title="<?php echo $this->__($_product->getAttributeText($sizeAttribute));?>">
+										<div class="selector-paletteImage <?php echo $class; ?>" data-selectorvalue="<?php echo $this->__($_product->getAttributeText($sizeAttribute));?>">
+											<span><?php echo $this->__($_product->getAttributeText($sizeAttribute));?></span>
+										</div>
+									</div>
+								</a>
+							<?php unset($discardSizeOptions[$sizeKey]); ?>
+						<?php endif; ?>
+					<?php else: ?>
+						<?php $_product = Mage::getModel("catalog/product")->load($productData['entity_id']); ?>
+						<?php if($productData['entity_id']==$currentProductId): ?>
+							<?php $class="active"; ?>
+							<?php else : ?>
+								<?php $class=""; ?>
+							<?php endif; ?>
+						<?php $_helper = $this->helper('catalog/output'); ?>
+							<a href="<?php echo $_product->getProductUrl(); ?>" class="product-size-group <?php echo $class; ?>">
+								<div class="selector-attr-size" title="<?php echo $this->__($_product->getAttributeText($sizeAttribute));?>">
+									<div class="selector-paletteImage <?php echo $class; ?>" style="background-image:url();" data-selectorvalue="<?php echo $this->__($_product->getAttributeText($sizeAttribute));?>">
+										<span><?php echo $this->__($_product->getAttributeText($sizeAttribute));?></span>
+									</div>
+								</div>
+							</a>
+						<?php unset($discardSizeOptions[$sizeKey]); ?>
+					<?php endif; ?>
+					<?php unset($_product); ?>
+				<?php endforeach; ?>
+				<?php // Loop Products ?>
+			</div>
+		</div>
+		<?php // p($discardSizeOptions);?>
+	</div>
+<?php endif; ?>
+<style type="text/css">
+	/*.selector-paletteImage active
+	{
+		border: 2px solid Black;
+	}*/
+</style>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Maven_Groupbyproduct>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Maven_Groupbyproduct>
+    </modules>
+</config> 
